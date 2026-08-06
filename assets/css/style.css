@@ -491,6 +491,41 @@ input.invalid { border-bottom-color: var(--maxi-red); animation: shake .3s; }
 }
 .submit-status.error { color: var(--maxi-red); font-weight: 600; }
 
+.thankyou-message {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  text-align: left;
+  margin-top: 40px;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+.thankyou-message p { margin: 0; }
+.thankyou-message .highlight {
+  background: var(--maxi-red);
+  color: #fff;
+  padding: 0 4px;
+  border-radius: 3px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+@media (max-width: 640px) {
+  .thankyou-message {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 16px;
+  }
+}
+
+.thankyou-logo {
+  display: block;
+  margin: 40px auto 0;
+  height: 96px;
+  width: auto;
+}
+
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-4px); }
