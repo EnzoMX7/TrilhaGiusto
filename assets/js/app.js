@@ -519,6 +519,11 @@ document.addEventListener("DOMContentLoaded", () => {
     heroVideo.muted = !heroVideo.muted;
     audioBtn.textContent = heroVideo.muted ? "\u{1F508} Ativar áudio" : "\u{1F50A} Áudio ativado";
     audioBtn.classList.toggle("active", !heroVideo.muted);
+    // clique é um gesto do usuário: se o autoplay silencioso tiver falhado
+    // (vídeo ainda pausado), aproveita esse gesto para retomar a reprodução
+    if (heroVideo.paused) {
+      heroVideo.play().catch(() => {});
+    }
   });
   // o botão de avançar só aparece quando o vídeo termina
   heroVideo.addEventListener("ended", () => {
