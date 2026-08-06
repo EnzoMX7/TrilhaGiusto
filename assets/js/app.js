@@ -419,10 +419,15 @@ function wireNav() {
 // Esconde a barra de progresso ao rolar para baixo, mostra ao rolar para cima
 function wireProgressAutoHide() {
   const REVEAL_NEAR_TOP = 12;
-  window.addEventListener("scroll", () => {
+  // Dependendo do navegador, quem rola de verdade é window, <html> ou <body> —
+  // por isso escuta os três e lê o primeiro valor não-zero encontrado.
+  const getScrollY = () =>
+    window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
+  const onScroll = () => {
     const shell = document.getElementById("progressShell");
     if (shell.hidden) return;
-    const currentY = window.scrollY;
+    const currentY = getScrollY();
     if (currentY <= REVEAL_NEAR_TOP) {
       shell.classList.remove("hide-on-scroll");
     } else if (currentY > lastScrollY) {
@@ -431,7 +436,11 @@ function wireProgressAutoHide() {
       shell.classList.remove("hide-on-scroll"); // rolando pra cima
     }
     lastScrollY = currentY;
-  }, { passive: true });
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  document.addEventListener("scroll", onScroll, { passive: true });
+  document.body.addEventListener("scroll", onScroll, { passive: true });
 }
 
 // ============================================================
