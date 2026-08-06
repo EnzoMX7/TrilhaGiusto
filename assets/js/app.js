@@ -561,9 +561,7 @@ function resetAll() {
   const escolaAtual = document.getElementById("escolaAtual");
   escolaAtual.disabled = false;
   escolaAtual.required = true;
-  const escolaAtualReqMark = document.getElementById("escolaAtualReqMark");
-  escolaAtualReqMark.textContent = "*";
-  escolaAtualReqMark.className = "req";
+  document.getElementById("escolaAtualReqMark").style.display = "";
   document.querySelectorAll(".choice-pill.selected, .option-card.selected")
     .forEach((el) => el.classList.remove("selected"));
   document.querySelectorAll(".option-card.disabled-limit")
@@ -596,13 +594,11 @@ document.addEventListener("DOMContentLoaded", () => {
       escola.value = "";
       escola.disabled = true;
       escola.required = false;
-      mark.textContent = "(opcional)";
-      mark.className = "opt";
+      mark.style.display = "none";
     } else {
       escola.disabled = false;
       escola.required = true;
-      mark.textContent = "*";
-      mark.className = "req";
+      mark.style.display = "";
     }
   });
 
