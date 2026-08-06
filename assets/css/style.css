@@ -322,7 +322,7 @@ input.invalid { border-bottom-color: var(--maxi-red); animation: shake .3s; }
 /* Caixas de seleção (relação, escolaridade, como conheceu) */
 .choice-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 10px;
 }
 .choice-pill {
@@ -409,7 +409,7 @@ input.invalid { border-bottom-color: var(--maxi-red); animation: shake .3s; }
   border-radius: inherit;
   background: var(--maxi-red);
 }
-.option-label { flex: 1; min-width: 0; overflow-wrap: break-word; }
+.option-label { flex: 1; min-width: 0; }
 
 /* Consent */
 .consent-box {
