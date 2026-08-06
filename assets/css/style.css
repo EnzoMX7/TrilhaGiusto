@@ -316,6 +316,9 @@ input:disabled {
   cursor: not-allowed;
   border-bottom-style: dashed;
 }
+label.label-disabled {
+  opacity: .35;
+}
 
 .checkbox-line {
   display: flex;

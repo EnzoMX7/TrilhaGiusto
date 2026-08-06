@@ -562,6 +562,7 @@ function resetAll() {
   escolaAtual.disabled = false;
   escolaAtual.required = true;
   document.getElementById("escolaAtualReqMark").style.display = "";
+  document.getElementById("escolaAtualLabel").classList.remove("label-disabled");
   document.querySelectorAll(".choice-pill.selected, .option-card.selected")
     .forEach((el) => el.classList.remove("selected"));
   document.querySelectorAll(".option-card.disabled-limit")
@@ -590,15 +591,18 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("primeiraExperiencia").addEventListener("change", (e) => {
     const escola = document.getElementById("escolaAtual");
     const mark = document.getElementById("escolaAtualReqMark");
+    const label = document.getElementById("escolaAtualLabel");
     if (e.target.checked) {
       escola.value = "";
       escola.disabled = true;
       escola.required = false;
       mark.style.display = "none";
+      label.classList.add("label-disabled");
     } else {
       escola.disabled = false;
       escola.required = true;
       mark.style.display = "";
+      label.classList.remove("label-disabled");
     }
   });
 
