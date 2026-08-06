@@ -46,7 +46,8 @@ const COLUMNS = [
   "q8_o_que_pesou",
   "q9_acompanhamento",
   "q10_conversar_visita",
-  "consentimento_lgpd"
+  "consentimento_lgpd",
+  "investimento_educacao"
 ];
 
 function getSheet_() {

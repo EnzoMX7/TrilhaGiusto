@@ -175,6 +175,13 @@ function renderQuestionScreens() {
     eyebrow.textContent = `Parte ${parteNum} · Pergunta ${qIndex + 1} de ${QUESTIONS.length}`;
     container.appendChild(eyebrow);
 
+    if (qIndex === 0) {
+      const intro = document.createElement("p");
+      intro.className = "section-subtitle";
+      intro.textContent = "Conhecendo sua família: Sem respostas certas ou erradas, queremos entender o que importa para vocês.";
+      container.appendChild(intro);
+    }
+
     const block = document.createElement("div");
     block.className = "question-block question-block-solo";
     block.dataset.qkey = q.key;
@@ -346,7 +353,13 @@ function validateScreen(n) {
 
   if (n === 4) {
     const nome = document.getElementById("criancaNome");
+    const nascimento = document.getElementById("criancaNascimento");
+    const segmento = document.getElementById("segmentoPretendido");
+    const escola = document.getElementById("escolaAtual");
     if (!nome.value.trim()) { markInvalid(nome); return false; }
+    if (!nascimento.value.trim()) { markInvalid(nascimento); return false; }
+    if (!segmento.value.trim()) { markInvalid(segmento); return false; }
+    if (!escola.value.trim()) { markInvalid(escola); return false; }
     return true;
   }
 
@@ -430,6 +443,7 @@ function collectPayload() {
     q8_o_que_pesou: (state.answers.q8_o_que_pesou || []).join("; "),
     q9_acompanhamento: state.answers.q9_acompanhamento || "",
     q10_conversar_visita: (state.answers.q10_conversar_visita || []).join("; "),
+    investimento_educacao: val("investimentoEducacao"),
     consentimento_lgpd: "Sim"
   };
 }

@@ -159,18 +159,18 @@
 
       <div class="field-row">
         <div class="field">
-          <label for="criancaNascimento">Data de nascimento <span class="opt">(opcional)</span></label>
-          <input type="date" id="criancaNascimento" />
+          <label for="criancaNascimento">Data de nascimento <span class="req">*</span></label>
+          <input type="date" id="criancaNascimento" required />
         </div>
         <div class="field">
-          <label for="segmentoPretendido">Segmento/série pretendida para 2027 <span class="opt">(opcional)</span></label>
-          <input type="text" id="segmentoPretendido" placeholder="ex.: Infantil 4, 2º ano..." />
+          <label for="segmentoPretendido">Segmento/série pretendida para 2027 <span class="req">*</span></label>
+          <input type="text" id="segmentoPretendido" required placeholder="ex.: Infantil 4, 2º ano..." />
         </div>
       </div>
 
       <div class="field">
-        <label for="escolaAtual">Escola atual <span class="opt">(opcional)</span></label>
-        <input type="text" id="escolaAtual" autocomplete="off" />
+        <label for="escolaAtual">Escola atual <span class="req">*</span></label>
+        <input type="text" id="escolaAtual" required autocomplete="off" />
         <label class="checkbox-line">
           <input type="checkbox" id="primeiraExperiencia" />
           <span>Primeira experiência escolar</span>
@@ -202,6 +202,12 @@
       <p class="eyebrow">Parte 5</p>
       <h2>Consentimento</h2>
       <p class="section-subtitle">Só mais um passo antes de concluir.</p>
+
+      <div class="field">
+        <label for="investimentoEducacao">Quanto a família pretende investir na educação dos filhos? <span class="opt">(opcional)</span></label>
+        <input type="text" id="investimentoEducacao" autocomplete="off" placeholder="Ex.: R$ 2.000/mês" />
+      </div>
+
       <label class="consent-box">
         <input type="checkbox" id="consentLGPD" required />
         <span>Autorizo o Colégio Maxi a tratar os dados informados para fins de atendimento e eventual matrícula, conforme a LGPD (Lei 13.709/2018).</span>
