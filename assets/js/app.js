@@ -323,6 +323,22 @@ function validateEmail(v) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 }
 
+// Extrai um valor numérico em reais de textos livres como "R$ 2.000/mês", "2500,50", "3000"
+function parseValorReais(v) {
+  if (!v) return NaN;
+  let s = v.replace(/[^\d.,]/g, "");
+  if (!s) return NaN;
+  if (s.includes(",")) {
+    s = s.replace(/\./g, "").replace(",", ".");
+  } else {
+    const parts = s.split(".");
+    if (parts.length > 2 || (parts.length === 2 && parts[1].length === 3)) {
+      s = parts.join("");
+    }
+  }
+  return parseFloat(s);
+}
+
 function markInvalid(el) {
   el.classList.add("invalid");
   el.addEventListener("animationend", () => el.classList.remove("invalid"), { once: true });
@@ -386,6 +402,13 @@ function validateScreen(n) {
   }
 
   if (n === 15) {
+    const investimento = document.getElementById("investimentoEducacao");
+    const valor = parseValorReais(investimento.value);
+    if (!investimento.value.trim() || isNaN(valor) || valor < 2000) {
+      markInvalid(investimento);
+      return false;
+    }
+
     const consent = document.getElementById("consentLGPD");
     const box = consent.closest(".consent-box");
     if (!consent.checked) {

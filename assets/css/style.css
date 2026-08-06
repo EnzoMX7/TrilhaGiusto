@@ -322,6 +322,13 @@ input.invalid { border-bottom-color: var(--maxi-red); animation: shake .3s; }
   cursor: pointer;
   color: var(--maxi-text);
 }
+
+.field-hint {
+  display: block;
+  color: var(--maxi-text-muted);
+  font-size: .82rem;
+  margin: 8px 0 0;
+}
 .checkbox-line input { width: 18px; height: 18px; accent-color: var(--maxi-red); }
 
 /* Caixas de seleção (relação, escolaridade, como conheceu) */
