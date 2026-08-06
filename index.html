@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Colégio Maxi · Trilha de Visita</title>
+<link rel="icon" href="assets/maxi-x-icon.png" />
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+<!-- Barra de progresso -->
+<div class="progress-shell" id="progressShell" hidden>
+  <div class="progress-labels">
+    <span id="progressLabel">ETAPA 1 DE 5</span>
+    <span class="pct" id="progressPct">20%</span>
+  </div>
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-seg" data-etapa="1"></div>
+    <div class="progress-seg" data-etapa="2"></div>
+    <div class="progress-seg" data-etapa="3"></div>
+    <div class="progress-seg" data-etapa="4"></div>
+    <div class="progress-seg" data-etapa="5"></div>
+  </div>
+</div>
+
+<!-- Botão discreto de reinício (recepção) -->
+<button class="reset-btn" id="resetBtn" title="Reiniciar para a próxima família" hidden>&#8635;</button>
+
+<main id="app">
+
+  <!-- TELA 1 · Vídeo de abertura -->
+  <section class="screen active" id="screen-1" data-screen="1">
+    <div class="video-screen">
+      <div class="video-frame">
+        <video class="opening-video" id="heroVideo" muted playsinline poster="assets/maxi-logo-white.png">
+          <source src="assets/video-abertura.mp4" type="video/mp4" />
+        </video>
+        <button type="button" class="audio-btn" id="audioBtn">&#128264; Ativar áudio</button>
+      </div>
+      <p class="video-caption">
+        <span class="hl-word">Privilégio</span>
+        <span class="video-caption-line2">de ser <img src="assets/maxi-wordmark-white.png" alt="Maxi" class="logo-inline" /></span>
+      </p>
+      <p class="hero-legal">Para a experiência completa, ative o áudio.</p>
+      <button type="button" class="btn btn-primary btn-xl" id="videoContinueBtn" hidden>Continuar</button>
+    </div>
+  </section>
+
+  <!-- TELA 2 · Boas-vindas (PT/EN) -->
+  <section class="screen" id="screen-2" data-screen="2">
+    <div class="hero hero-light">
+      <div class="hero-content">
+        <h1>Bem-vindos ao <img src="assets/maxi-wordmark-white.png" alt="Maxi" class="logo-inline" />.</h1>
+        <h2 class="lang-en">Welcome to the <img src="assets/maxi-wordmark-white.png" alt="Maxi" class="logo-inline" />.</h2>
+        <p class="hero-copy">Para conhecermos cada família que deseja fazer parte da nossa comunidade, pedimos alguns minutos antes da visita.</p>
+        <p class="hero-copy lang-en">To get to know each family who wishes to join our community, we ask for a few minutes before your visit.</p>
+        <p class="hero-legal">As informações são tratadas com sigilo e usadas apenas para o seu atendimento e eventual matrícula (LGPD).</p>
+        <p class="hero-legal lang-en">The information is handled with confidentiality and used only for your service and potential enrollment (LGPD).</p>
+        <button class="btn btn-primary btn-xl" id="startBtn">Começar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TELA 3 · Responsáveis -->
+  <section class="screen" id="screen-3" data-screen="3">
+    <div class="screen-inner">
+      <p class="eyebrow">Parte 1</p>
+      <h2>Cadastro dos responsáveis</h2>
+      <p class="section-subtitle">Comece com os dados de contato de quem acompanha a criança no dia a dia.</p>
+
+      <div class="field">
+        <label for="resp1Nome">Nome completo do responsável <span class="req">*</span></label>
+        <input type="text" id="resp1Nome" required autocomplete="name" placeholder="Ex.: Maria Souza" />
+      </div>
+
+      <div class="field">
+        <label>Relação com a criança <span class="req">*</span></label>
+        <div class="choice-row" data-field="relacao" data-mode="single">
+          <button type="button" class="choice-pill" data-value="Mãe">Mãe</button>
+          <button type="button" class="choice-pill" data-value="Pai">Pai</button>
+          <button type="button" class="choice-pill" data-value="Avó/Avô">Avó/Avô</button>
+          <button type="button" class="choice-pill" data-value="Outro responsável legal">Outro responsável legal</button>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="whatsapp">WhatsApp / telefone <span class="req">*</span></label>
+          <input type="tel" id="whatsapp" required autocomplete="tel" inputmode="tel" placeholder="(00) 90000-0000" />
+        </div>
+        <div class="field">
+          <label for="email">E-mail <span class="req">*</span></label>
+          <input type="email" id="email" required autocomplete="email" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="resp2Nome">Nome completo do responsável 2 <span class="opt">(opcional)</span></label>
+        <input type="text" id="resp2Nome" autocomplete="off" />
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Escolaridade do responsável 1 <span class="req">*</span></label>
+          <div class="choice-row" data-field="escolaridade1" data-mode="single">
+            <button type="button" class="choice-pill" data-value="Ensino Médio">Ensino Médio</button>
+            <button type="button" class="choice-pill" data-value="Superior">Superior</button>
+            <button type="button" class="choice-pill" data-value="Pós-graduação">Pós-graduação</button>
+            <button type="button" class="choice-pill" data-value="Mestrado/Doutorado">Mestrado/Doutorado</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Escolaridade do responsável 2 <span class="opt">(opcional)</span></label>
+          <div class="choice-row" data-field="escolaridade2" data-mode="single">
+            <button type="button" class="choice-pill" data-value="Ensino Médio">Ensino Médio</button>
+            <button type="button" class="choice-pill" data-value="Superior">Superior</button>
+            <button type="button" class="choice-pill" data-value="Pós-graduação">Pós-graduação</button>
+            <button type="button" class="choice-pill" data-value="Mestrado/Doutorado">Mestrado/Doutorado</button>
+            <button type="button" class="choice-pill" data-value="Não se aplica">Não se aplica</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="cidadeBairro">Cidade / bairro <span class="req">*</span></label>
+        <input type="text" id="cidadeBairro" autocomplete="off" />
+      </div>
+
+      <div class="field">
+        <label>Como conheceu o Maxi <span class="req">*</span></label>
+        <div class="choice-row" data-field="comoConheceu" data-mode="single">
+          <button type="button" class="choice-pill" data-value="Indicação">Indicação</button>
+          <button type="button" class="choice-pill" data-value="Redes sociais">Redes sociais</button>
+          <button type="button" class="choice-pill" data-value="Pesquisa/Google">Pesquisa/Google</button>
+          <button type="button" class="choice-pill" data-value="Já é família Maxi">Já é família Maxi</button>
+          <button type="button" class="choice-pill" data-value="Outro">Outro</button>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button type="button" class="btn btn-ghost" data-back>Voltar</button>
+        <button type="button" class="btn btn-primary" data-next>Avançar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TELA 4 · Criança -->
+  <section class="screen" id="screen-4" data-screen="4">
+    <div class="screen-inner">
+      <p class="eyebrow">Parte 2</p>
+      <h2>Sobre a criança</h2>
+      <p class="section-subtitle">Agora, conte um pouco sobre quem vai estudar com a gente.</p>
+
+      <div class="field">
+        <label for="criancaNome">Nome completo da criança <span class="req">*</span></label>
+        <input type="text" id="criancaNome" required autocomplete="off" placeholder="Ex.: João Souza" />
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="criancaNascimento">Data de nascimento <span class="opt">(opcional)</span></label>
+          <input type="date" id="criancaNascimento" />
+        </div>
+        <div class="field">
+          <label for="segmentoPretendido">Segmento/série pretendida para 2027 <span class="opt">(opcional)</span></label>
+          <input type="text" id="segmentoPretendido" placeholder="ex.: Infantil 4, 2º ano..." />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="escolaAtual">Escola atual <span class="opt">(opcional)</span></label>
+        <input type="text" id="escolaAtual" autocomplete="off" />
+        <label class="checkbox-line">
+          <input type="checkbox" id="primeiraExperiencia" />
+          <span>Primeira experiência escolar</span>
+        </label>
+      </div>
+
+      <div class="nav-row">
+        <button type="button" class="btn btn-ghost" data-back>Voltar</button>
+        <button type="button" class="btn btn-primary" data-next>Avançar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TELAS 5–14 · Conhecendo a família, uma pergunta por tela (preenchidas via JS) -->
+  <section class="screen" id="screen-5" data-screen="5"><div class="screen-inner questions-screen"></div></section>
+  <section class="screen" id="screen-6" data-screen="6"><div class="screen-inner questions-screen"></div></section>
+  <section class="screen" id="screen-7" data-screen="7"><div class="screen-inner questions-screen"></div></section>
+  <section class="screen" id="screen-8" data-screen="8"><div class="screen-inner questions-screen"></div></section>
+  <section class="screen" id="screen-9" data-screen="9"><div class="screen-inner questions-screen"></div></section>
+  <section class="screen" id="screen-10" data-screen="10"><div class="screen-inner questions-screen"></div></section>
+  <section class="screen" id="screen-11" data-screen="11"><div class="screen-inner questions-screen"></div></section>
+  <section class="screen" id="screen-12" data-screen="12"><div class="screen-inner questions-screen"></div></section>
+  <section class="screen" id="screen-13" data-screen="13"><div class="screen-inner questions-screen"></div></section>
+  <section class="screen" id="screen-14" data-screen="14"><div class="screen-inner questions-screen"></div></section>
+
+  <!-- TELA 15 · Consentimento -->
+  <section class="screen" id="screen-15" data-screen="15">
+    <div class="screen-inner">
+      <p class="eyebrow">Parte 5</p>
+      <h2>Consentimento</h2>
+      <p class="section-subtitle">Só mais um passo antes de concluir.</p>
+      <label class="consent-box">
+        <input type="checkbox" id="consentLGPD" required />
+        <span>Autorizo o Colégio Maxi a tratar os dados informados para fins de atendimento e eventual matrícula, conforme a LGPD (Lei 13.709/2018).</span>
+      </label>
+      <div class="nav-row">
+        <button type="button" class="btn btn-ghost" data-back>Voltar</button>
+        <button type="button" class="btn btn-primary" id="submitBtn">Concluir</button>
+      </div>
+      <p class="submit-status" id="submitStatus" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- TELA 16 · Conclusão -->
+  <section class="screen" id="screen-16" data-screen="16">
+    <div class="screen-inner center">
+      <div class="check-mark">&#10003;</div>
+      <h2>Obrigado.</h2>
+      <p class="hero-copy">Em instantes nossa equipe inicia a visita com vocês.</p>
+    </div>
+  </section>
+
+</main>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
