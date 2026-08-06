@@ -376,10 +376,11 @@ function validateScreen(n) {
     const nascimento = document.getElementById("criancaNascimento");
     const segmento = document.getElementById("segmentoPretendido");
     const escola = document.getElementById("escolaAtual");
+    const primeiraExperiencia = document.getElementById("primeiraExperiencia");
     if (!nome.value.trim()) { markInvalid(nome); return false; }
     if (!nascimento.value.trim()) { markInvalid(nascimento); return false; }
     if (!segmento.value.trim()) { markInvalid(segmento); return false; }
-    if (!escola.value.trim()) { markInvalid(escola); return false; }
+    if (!primeiraExperiencia.checked && !escola.value.trim()) { markInvalid(escola); return false; }
     return true;
   }
 
@@ -557,6 +558,12 @@ function resetAll() {
   document.querySelectorAll("input[type='text'], input[type='tel'], input[type='email'], input[type='date']")
     .forEach((i) => (i.value = ""));
   document.querySelectorAll("input[type='checkbox']").forEach((c) => (c.checked = false));
+  const escolaAtual = document.getElementById("escolaAtual");
+  escolaAtual.disabled = false;
+  escolaAtual.required = true;
+  const escolaAtualReqMark = document.getElementById("escolaAtualReqMark");
+  escolaAtualReqMark.textContent = "*";
+  escolaAtualReqMark.className = "req";
   document.querySelectorAll(".choice-pill.selected, .option-card.selected")
     .forEach((el) => el.classList.remove("selected"));
   document.querySelectorAll(".option-card.disabled-limit")
@@ -580,6 +587,23 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("videoContinueBtn").addEventListener("click", goNext);
   document.getElementById("resetBtn").addEventListener("click", () => {
     if (confirm("Reiniciar a trilha para a próxima família?")) resetAll();
+  });
+
+  document.getElementById("primeiraExperiencia").addEventListener("change", (e) => {
+    const escola = document.getElementById("escolaAtual");
+    const mark = document.getElementById("escolaAtualReqMark");
+    if (e.target.checked) {
+      escola.value = "";
+      escola.disabled = true;
+      escola.required = false;
+      mark.textContent = "(opcional)";
+      mark.className = "opt";
+    } else {
+      escola.disabled = false;
+      escola.required = true;
+      mark.textContent = "*";
+      mark.className = "req";
+    }
   });
 
   const heroVideo = document.getElementById("heroVideo");
