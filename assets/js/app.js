@@ -157,6 +157,7 @@ const state = {
 };
 
 const TOTAL_SCREENS = 16;
+let lastScrollY = 0;
 
 // ============================================================
 // RENDER DAS TELAS DE PERGUNTAS (5–14) · uma pergunta por tela
@@ -289,6 +290,9 @@ function showScreen(n) {
   const resetBtn = document.getElementById("resetBtn");
   const etapa = screenToEtapa(n);
 
+  progressShell.classList.remove("hide-on-scroll"); // reaparece ao trocar de tela
+  lastScrollY = 0;
+
   resetBtn.hidden = n === 1; // reinício disponível a partir da tela de boas-vindas
 
   if (etapa === 0) {
@@ -412,6 +416,23 @@ function wireNav() {
   });
 }
 
+// Esconde a barra de progresso ao rolar para baixo, mostra ao rolar para cima
+function wireProgressAutoHide() {
+  const SCROLL_HIDE_THRESHOLD = 12;
+  window.addEventListener("scroll", () => {
+    const shell = document.getElementById("progressShell");
+    if (shell.hidden) return;
+    const currentY = window.scrollY;
+    const delta = currentY - lastScrollY;
+    if (currentY > SCROLL_HIDE_THRESHOLD && delta > 4) {
+      shell.classList.add("hide-on-scroll");
+    } else if (delta < -4 || currentY <= SCROLL_HIDE_THRESHOLD) {
+      shell.classList.remove("hide-on-scroll");
+    }
+    lastScrollY = currentY;
+  }, { passive: true });
+}
+
 // ============================================================
 // ENVIO PARA O GOOGLE SHEETS
 // ============================================================
@@ -519,6 +540,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderQuestionScreens();
   wireChoiceRows();
   wireNav();
+  wireProgressAutoHide();
 
   document.getElementById("startBtn").addEventListener("click", goNext);
   document.getElementById("submitBtn").addEventListener("click", handleSubmit);
