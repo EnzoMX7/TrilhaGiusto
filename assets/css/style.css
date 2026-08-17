@@ -169,6 +169,17 @@ h1 .logo-inline, h2 .logo-inline { height: 1em; }
   margin: 0 0 6px;
 }
 
+.vagas-alert {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--maxi-text);
+  border-left: 3px solid var(--maxi-red);
+  padding-left: 14px;
+  margin: 0 0 32px;
+}
+
 /* Hero / boas-vindas (tela 2) */
 .hero {
   position: relative;

@@ -141,9 +141,11 @@ const QUESTIONS = [
   }
 ];
 
-// Distribuição das perguntas nas telas 5–14 (uma por tela, estilo questionário)
+// Distribuição das perguntas nas telas 6–14 (uma por tela, estilo questionário)
+// A pergunta 1 (q1_motivo_busca) saiu daqui: agora tem tela própria (tela 3),
+// antes da trilha oficial começar. Veja renderMotivoBuscaScreen().
 const SCREEN_QUESTION_MAP = {
-  5: [0], 6: [1], 7: [2], 8: [3], 9: [4],
+  6: [1], 7: [2], 8: [3], 9: [4],
   10: [5], 11: [6], 12: [7], 13: [8], 14: [9]
 };
 
@@ -176,7 +178,7 @@ function renderQuestionScreens() {
     eyebrow.textContent = `Parte ${parteNum} · Pergunta ${qIndex + 1} de ${QUESTIONS.length}`;
     container.appendChild(eyebrow);
 
-    if (qIndex === 0) {
+    if (qIndex === 1) {
       const intro = document.createElement("p");
       intro.className = "section-subtitle";
       intro.textContent = "Conhecendo sua família: Sem respostas certas ou erradas, queremos entender o que importa para vocês.";
@@ -213,6 +215,22 @@ function renderQuestionScreens() {
       <button type="button" class="btn btn-primary" data-next>Avançar</button>
     `;
     container.appendChild(nav);
+  });
+}
+
+// Tela 3 · "O que levou vocês a buscar o Maxi neste momento?" — pergunta
+// exibida antes da trilha oficial começar, fora do loop das demais perguntas.
+function renderMotivoBuscaScreen() {
+  const q = QUESTIONS[0];
+  const grid = document.getElementById("motivoBuscaGrid");
+  q.options.forEach((opt) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-card";
+    btn.dataset.value = opt;
+    btn.innerHTML = `<span class="option-check"></span><span class="option-label">${opt}</span>`;
+    btn.addEventListener("click", () => handleOptionClick(q, btn, grid));
+    grid.appendChild(btn);
   });
 }
 
@@ -271,12 +289,12 @@ function wireChoiceRows() {
 // ============================================================
 // Mapeia a tela atual para uma das 5 etapas mostradas na barra de progresso
 function screenToEtapa(n) {
-  if (n === 3) return 1;              // Cadastro dos responsáveis
-  if (n === 4) return 2;              // Criança
-  if (n >= 5 && n <= 9) return 3;     // Conhecendo sua família (perguntas 1–5)
+  if (n === 4) return 1;              // Cadastro dos responsáveis
+  if (n === 5) return 2;              // Criança
+  if (n >= 6 && n <= 9) return 3;     // Conhecendo sua família (perguntas 2–5)
   if (n >= 10 && n <= 14) return 4;   // Conhecendo sua família (perguntas 6–10)
   if (n === 15) return 5;             // Consentimento
-  return 0;                           // vídeo, boas-vindas, conclusão: sem barra
+  return 0;                           // vídeo, boas-vindas, motivo da busca, conclusão: sem barra
 }
 
 function showScreen(n) {
@@ -357,6 +375,19 @@ function markInvalidChoiceRow(field) {
 // Retorna true se a tela atual é válida (bloqueia avanço se não for)
 function validateScreen(n) {
   if (n === 3) {
+    const q = QUESTIONS[0];
+    const answer = state.answers[q.key];
+    const grid = document.getElementById("motivoBuscaGrid");
+    if (!answer) {
+      grid.scrollIntoView({ behavior: "smooth", block: "center" });
+      grid.style.outline = "2px solid var(--maxi-red)";
+      setTimeout(() => (grid.style.outline = "none"), 600);
+      return false;
+    }
+    return true;
+  }
+
+  if (n === 4) {
     const nome = document.getElementById("resp1Nome");
     const whats = document.getElementById("whatsapp");
     const email = document.getElementById("email");
@@ -371,7 +402,7 @@ function validateScreen(n) {
     return true;
   }
 
-  if (n === 4) {
+  if (n === 5) {
     const nome = document.getElementById("criancaNome");
     const nascimento = document.getElementById("criancaNascimento");
     const segmento = document.getElementById("segmentoPretendido");
@@ -384,7 +415,7 @@ function validateScreen(n) {
     return true;
   }
 
-  if (n >= 5 && n <= 14) {
+  if (n >= 6 && n <= 14) {
     const qIndexes = SCREEN_QUESTION_MAP[n];
     for (const qIndex of qIndexes) {
       const q = QUESTIONS[qIndex];
@@ -577,6 +608,7 @@ function resetAll() {
 // ============================================================
 document.addEventListener("DOMContentLoaded", () => {
   renderQuestionScreens();
+  renderMotivoBuscaScreen();
   wireChoiceRows();
   wireNav();
   wireProgressAutoHide();
