@@ -89,7 +89,7 @@ const QUESTIONS = [
   },
   {
     key: "q7_alem_notas",
-    text: "Além de notas, o que esperam que seu filho leve para a vida?",
+    text: "O que vocês não abririam mão de garantir para o futuro do seu filho?",
     hint: "uma opção",
     mode: "single",
     options: [
