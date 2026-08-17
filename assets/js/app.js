@@ -280,6 +280,33 @@ function registrarVotoMotivoBusca(opcao) {
   }).catch(() => {});
 }
 
+// Tela 15 · "Quanto a família pretende investir na educação dos filhos?"
+// Múltipla escolha, mesmo estilo das demais perguntas (sem porcentagem/voto).
+const INVESTIMENTO_QUESTION = {
+  key: "investimento_educacao",
+  mode: "single",
+  options: [
+    "Até R$ 2.000,00",
+    "R$ 2.000,00 – 2.500,00",
+    "R$ 2.500,00 – 3.000,00",
+    "Acima de R$ 3.000,00"
+  ]
+};
+
+function renderInvestimentoScreen() {
+  const q = INVESTIMENTO_QUESTION;
+  const grid = document.getElementById("investimentoGrid");
+  q.options.forEach((opt) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-card";
+    btn.dataset.value = opt;
+    btn.innerHTML = `<span class="option-check"></span><span class="option-label">${opt}</span>`;
+    btn.addEventListener("click", () => handleOptionClick(q, btn, grid));
+    grid.appendChild(btn);
+  });
+}
+
 function renderMotivoBuscaScreen() {
   const q = QUESTIONS[0];
   const grid = document.getElementById("motivoBuscaGrid");
@@ -409,22 +436,6 @@ function validateEmail(v) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 }
 
-// Extrai um valor numérico em reais de textos livres como "R$ 2.000/mês", "2500,50", "3000"
-function parseValorReais(v) {
-  if (!v) return NaN;
-  let s = v.replace(/[^\d.,]/g, "");
-  if (!s) return NaN;
-  if (s.includes(",")) {
-    s = s.replace(/\./g, "").replace(",", ".");
-  } else {
-    const parts = s.split(".");
-    if (parts.length > 2 || (parts.length === 2 && parts[1].length === 3)) {
-      s = parts.join("");
-    }
-  }
-  return parseFloat(s);
-}
-
 function markInvalid(el) {
   el.classList.add("invalid");
   el.addEventListener("animationend", () => el.classList.remove("invalid"), { once: true });
@@ -502,10 +513,11 @@ function validateScreen(n) {
   }
 
   if (n === 15) {
-    const investimento = document.getElementById("investimentoEducacao");
-    const valor = parseValorReais(investimento.value);
-    if (!investimento.value.trim() || isNaN(valor) || valor < 2000) {
-      markInvalid(investimento);
+    if (!state.answers.investimento_educacao) {
+      const grid = document.getElementById("investimentoGrid");
+      grid.scrollIntoView({ behavior: "smooth", block: "center" });
+      grid.style.outline = "2px solid var(--maxi-red)";
+      setTimeout(() => (grid.style.outline = "none"), 600);
       return false;
     }
 
@@ -597,7 +609,7 @@ function collectPayload() {
     q8_o_que_pesou: (state.answers.q8_o_que_pesou || []).join("; "),
     q9_acompanhamento: state.answers.q9_acompanhamento || "",
     q10_conversar_visita: (state.answers.q10_conversar_visita || []).join("; "),
-    investimento_educacao: val("investimentoEducacao"),
+    investimento_educacao: state.answers.investimento_educacao || "",
     consentimento_lgpd: "Sim"
   };
 }
@@ -681,6 +693,7 @@ function resetAll() {
 document.addEventListener("DOMContentLoaded", () => {
   renderQuestionScreens();
   renderMotivoBuscaScreen();
+  renderInvestimentoScreen();
   fetchVoteCounts();
   wireChoiceRows();
   wireNav();
