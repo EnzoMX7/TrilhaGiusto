@@ -472,7 +472,7 @@ label.label-disabled {
   width: 0%;
   background: var(--maxi-red);
   opacity: .3;
-  transition: width .5s ease;
+  transition: width .6s cubic-bezier(.22, .9, .32, 1);
   pointer-events: none;
   z-index: 0;
 }

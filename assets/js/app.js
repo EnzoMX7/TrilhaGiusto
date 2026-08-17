@@ -267,7 +267,13 @@ function showOptionVotePercentage(btn, opt) {
     fill.className = "option-fill";
     btn.prepend(fill); // fica atrás do conteúdo (option-row tem z-index maior)
   }
-  fill.style.width = `${pct}%`;
+  // zera a largura e força o navegador a "registrar" esse estado antes de
+  // animar até o valor final — senão ele pula direto pro resultado, sem transição
+  fill.style.width = "0%";
+  void fill.offsetWidth; // força reflow
+  requestAnimationFrame(() => {
+    fill.style.width = `${pct}%`;
+  });
 }
 
 function registrarVotoMotivoBusca(opcao) {
