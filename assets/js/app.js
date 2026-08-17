@@ -220,6 +220,63 @@ function renderQuestionScreens() {
 
 // Tela 3 · "O que levou vocês a buscar o Maxi neste momento?" — pergunta
 // exibida antes da trilha oficial começar, fora do loop das demais perguntas.
+// Mostra, após o clique, a porcentagem de respostas de todas as famílias
+// (guardada na planilha), com um piso mínimo pra nenhuma opção parecer "zerada".
+const VOTE_BASE_PER_OPTION = 20; // votos "fantasma" por opção, garante piso mínimo
+let voteCounts = {}; // contagem real vinda da planilha, preenchida por fetchVoteCounts()
+
+async function fetchVoteCounts() {
+  if (!CONFIG.SHEET_WEBAPP_URL) return;
+  try {
+    const res = await fetch(`${CONFIG.SHEET_WEBAPP_URL}?action=votos`);
+    const data = await res.json();
+    if (data.ok) voteCounts = data.votos || {};
+  } catch (err) {
+    console.warn("[Maxi] Não foi possível buscar os votos da pergunta inicial.", err);
+  }
+}
+
+function computeVotePercentages(selectedOption, options) {
+  const totals = {};
+  let total = 0;
+  options.forEach((opt) => {
+    let count = VOTE_BASE_PER_OPTION + (voteCounts[opt] || 0);
+    if (opt === selectedOption) count += 1; // conta o clique atual, ainda não salvo
+    totals[opt] = count;
+    total += count;
+  });
+  const percentages = {};
+  options.forEach((opt) => {
+    percentages[opt] = Math.round((totals[opt] / total) * 100);
+  });
+  return percentages;
+}
+
+function updateVotePercentagesDisplay(grid, q, selectedOption) {
+  const percentages = computeVotePercentages(selectedOption, q.options);
+  grid.querySelectorAll(".option-card").forEach((btn) => {
+    const opt = btn.dataset.value;
+    let badge = btn.querySelector(".option-pct");
+    if (!badge) {
+      badge = document.createElement("span");
+      badge.className = "option-pct";
+      btn.appendChild(badge);
+    }
+    badge.textContent = `${percentages[opt]}%`;
+  });
+  grid.classList.add("show-pct");
+}
+
+function registrarVotoMotivoBusca(opcao) {
+  if (!CONFIG.SHEET_WEBAPP_URL || !opcao) return;
+  fetch(CONFIG.SHEET_WEBAPP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ action: "incrementar_voto", opcao })
+  }).catch(() => {});
+}
+
 function renderMotivoBuscaScreen() {
   const q = QUESTIONS[0];
   const grid = document.getElementById("motivoBuscaGrid");
@@ -229,7 +286,10 @@ function renderMotivoBuscaScreen() {
     btn.className = "option-card";
     btn.dataset.value = opt;
     btn.innerHTML = `<span class="option-check"></span><span class="option-label">${opt}</span>`;
-    btn.addEventListener("click", () => handleOptionClick(q, btn, grid));
+    btn.addEventListener("click", () => {
+      handleOptionClick(q, btn, grid);
+      updateVotePercentagesDisplay(grid, q, state.answers[q.key]);
+    });
     grid.appendChild(btn);
   });
 }
@@ -457,6 +517,9 @@ function validateScreen(n) {
 
 function goNext() {
   if (!validateScreen(state.screen)) return;
+  if (state.screen === 3) {
+    registrarVotoMotivoBusca(state.answers[QUESTIONS[0].key]);
+  }
   if (state.screen < TOTAL_SCREENS) showScreen(state.screen + 1);
 }
 
@@ -598,7 +661,10 @@ function resetAll() {
     .forEach((el) => el.classList.remove("selected"));
   document.querySelectorAll(".option-card.disabled-limit")
     .forEach((el) => el.classList.remove("disabled-limit"));
+  document.querySelectorAll(".option-grid.show-pct").forEach((g) => g.classList.remove("show-pct"));
+  document.querySelectorAll(".option-pct").forEach((el) => el.remove());
   document.getElementById("submitStatus").textContent = "";
+  fetchVoteCounts(); // atualiza o placar pra próxima família
 
   showScreen(1);
 }
@@ -609,6 +675,7 @@ function resetAll() {
 document.addEventListener("DOMContentLoaded", () => {
   renderQuestionScreens();
   renderMotivoBuscaScreen();
+  fetchVoteCounts();
   wireChoiceRows();
   wireNav();
   wireProgressAutoHide();

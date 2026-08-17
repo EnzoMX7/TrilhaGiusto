@@ -63,9 +63,68 @@ function getSheet_() {
   return sheet;
 }
 
+// ============================================================
+// VOTOS · "O que levou vocês a buscar o Maxi neste momento?"
+// Guarda uma contagem por opção, numa aba separada, para o site
+// mostrar a porcentagem de respostas em tempo real.
+// ============================================================
+const VOTE_SHEET_NAME = "VotosMotivoBusca";
+
+const VOTE_OPTIONS = [
+  "Mudança de cidade/bairro",
+  "Busca por mais excelência acadêmica",
+  "Busca por outros valores/ambiente",
+  "Primeira experiência escolar",
+  "Indicação de outra família"
+];
+
+function getVoteSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(VOTE_SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(VOTE_SHEET_NAME);
+  }
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["opcao", "votos"]);
+    VOTE_OPTIONS.forEach((opt) => sheet.appendRow([opt, 0]));
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+function getVotos_() {
+  const sheet = getVoteSheet_();
+  const data = sheet.getDataRange().getValues();
+  const votos = {};
+  for (let i = 1; i < data.length; i++) {
+    votos[data[i][0]] = Number(data[i][1]) || 0;
+  }
+  return votos;
+}
+
+function incrementarVoto_(opcao) {
+  const sheet = getVoteSheet_();
+  const data = sheet.getDataRange().getValues();
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][0] === opcao) {
+      sheet.getRange(i + 1, 2).setValue((Number(data[i][1]) || 0) + 1);
+      return;
+    }
+  }
+  sheet.appendRow([opcao, 1]); // opção não prevista originalmente
+}
+
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
+
+    if (data.action === "incrementar_voto") {
+      incrementarVoto_(data.opcao);
+      return ContentService
+        .createTextOutput(JSON.stringify({ ok: true }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     const sheet = getSheet_();
     const row = COLUMNS.map((col) => data[col] !== undefined ? data[col] : "");
     sheet.appendRow(row);
@@ -81,6 +140,11 @@ function doPost(e) {
 }
 
 function doGet(e) {
+  if (e.parameter && e.parameter.action === "votos") {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true, votos: getVotos_() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
   return ContentService
     .createTextOutput(JSON.stringify({ status: "online", sheet: SHEET_NAME }))
     .setMimeType(ContentService.MimeType.JSON);

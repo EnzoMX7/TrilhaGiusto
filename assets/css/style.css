@@ -442,6 +442,17 @@ label.label-disabled {
 }
 .option-label { flex: 1; min-width: 0; }
 
+.option-pct {
+  display: none;
+  margin-left: auto;
+  padding-left: 10px;
+  font-weight: 700;
+  font-size: .85rem;
+  color: var(--maxi-red);
+  flex-shrink: 0;
+}
+.option-grid.show-pct .option-pct { display: inline-block; }
+
 /* Consent */
 .consent-box {
   display: flex;
