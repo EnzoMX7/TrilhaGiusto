@@ -261,14 +261,13 @@ function showOptionVotePercentage(btn, opt) {
   }
   badge.textContent = `${pct}%`;
 
-  let barWrap = btn.querySelector(".option-pct-bar-wrap");
-  if (!barWrap) {
-    barWrap = document.createElement("span");
-    barWrap.className = "option-pct-bar-wrap";
-    barWrap.innerHTML = `<span class="option-pct-bar"></span>`;
-    btn.appendChild(barWrap);
+  let fill = btn.querySelector(".option-fill");
+  if (!fill) {
+    fill = document.createElement("span");
+    fill.className = "option-fill";
+    btn.prepend(fill); // fica atrás do conteúdo (option-row tem z-index maior)
   }
-  barWrap.querySelector(".option-pct-bar").style.width = `${pct}%`;
+  fill.style.width = `${pct}%`;
 }
 
 function registrarVotoMotivoBusca(opcao) {
@@ -669,7 +668,7 @@ function resetAll() {
   document.querySelectorAll(".option-card.disabled-limit")
     .forEach((el) => el.classList.remove("disabled-limit"));
   document.querySelectorAll(".option-pct").forEach((el) => el.remove());
-  document.querySelectorAll(".option-pct-bar-wrap").forEach((el) => el.remove());
+  document.querySelectorAll(".option-fill").forEach((el) => el.remove());
   document.getElementById("submitStatus").textContent = "";
   fetchVoteCounts(); // atualiza o placar pra próxima família
 

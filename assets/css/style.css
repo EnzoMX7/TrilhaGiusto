@@ -402,8 +402,9 @@ label.label-disabled {
   .option-grid { grid-template-columns: 1fr; }
 }
 .option-card {
+  position: relative;
+  overflow: hidden;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
   text-align: left;
@@ -419,6 +420,8 @@ label.label-disabled {
   transition: all .15s;
 }
 .option-row {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -460,23 +463,20 @@ label.label-disabled {
 }
 .option-card.selected .option-pct { display: inline-block; }
 
-.option-pct-bar-wrap {
+/* Preenchimento tipo "copo enchendo": ocupa o retângulo inteiro da
+   opção, da esquerda pra direita, proporcional à porcentagem. */
+.option-fill {
   display: none;
-  flex-basis: 100%;
-  height: 6px;
-  border-radius: 99px;
-  background: rgba(255, 255, 255, .1);
-  overflow: hidden;
-}
-.option-card.selected .option-pct-bar-wrap { display: block; }
-.option-pct-bar {
-  display: block;
-  height: 100%;
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
   width: 0%;
   background: var(--maxi-red);
-  border-radius: 99px;
-  transition: width .3s ease;
+  opacity: .3;
+  transition: width .5s ease;
+  pointer-events: none;
+  z-index: 0;
 }
+.option-card.selected .option-fill { display: block; }
 
 /* Consent */
 .consent-box {
