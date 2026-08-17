@@ -220,9 +220,16 @@ function renderQuestionScreens() {
 
 // Tela 3 · "O que levou vocês a buscar o Maxi neste momento?" — pergunta
 // exibida antes da trilha oficial começar, fora do loop das demais perguntas.
-// Mostra, após o clique, a porcentagem de respostas de todas as famílias
-// (guardada na planilha), com um piso mínimo pra nenhuma opção parecer "zerada".
-const VOTE_BASE_PER_OPTION = 20; // votos "fantasma" por opção, garante piso mínimo
+// Mostra, só na opção clicada, a porcentagem de famílias que já escolheram
+// essa opção (guardada na planilha) + uma barrinha proporcional.
+// Cálculo desacoplado por opção (não precisa somar 100% entre as 5), então
+// dá pra ancorar o início sempre entre 10-15%, sem depender de dividir
+// igualmente entre as opções. O clique NÃO grava nada ainda — só reflete
+// os votos já salvos por visitantes anteriores; o voto desta família só é
+// contado quando ela envia o formulário (handleSubmit), valendo a partir
+// da próxima pessoa que acessar o site.
+const VOTE_BASE_PER_OPTION = 12; // % de largada (antes de haver votos reais)
+const VOTE_BASE_POOL = 100;      // "peso" total virtual usado no cálculo
 let voteCounts = {}; // contagem real vinda da planilha, preenchida por fetchVoteCounts()
 
 async function fetchVoteCounts() {
@@ -236,35 +243,32 @@ async function fetchVoteCounts() {
   }
 }
 
-function computeVotePercentages(selectedOption, options) {
-  const totals = {};
-  let total = 0;
-  options.forEach((opt) => {
-    let count = VOTE_BASE_PER_OPTION + (voteCounts[opt] || 0);
-    if (opt === selectedOption) count += 1; // conta o clique atual, ainda não salvo
-    totals[opt] = count;
-    total += count;
-  });
-  const percentages = {};
-  options.forEach((opt) => {
-    percentages[opt] = Math.round((totals[opt] / total) * 100);
-  });
-  return percentages;
+function computeOptionPercentage(opt) {
+  const totalReal = Object.values(voteCounts).reduce((s, v) => s + v, 0);
+  const count = VOTE_BASE_PER_OPTION + (voteCounts[opt] || 0);
+  const total = VOTE_BASE_POOL + totalReal;
+  return Math.round((count / total) * 100);
 }
 
-function updateVotePercentagesDisplay(grid, q, selectedOption) {
-  const percentages = computeVotePercentages(selectedOption, q.options);
-  grid.querySelectorAll(".option-card").forEach((btn) => {
-    const opt = btn.dataset.value;
-    let badge = btn.querySelector(".option-pct");
-    if (!badge) {
-      badge = document.createElement("span");
-      badge.className = "option-pct";
-      btn.appendChild(badge);
-    }
-    badge.textContent = `${percentages[opt]}%`;
-  });
-  grid.classList.add("show-pct");
+function showOptionVotePercentage(btn, opt) {
+  const pct = computeOptionPercentage(opt);
+
+  let badge = btn.querySelector(".option-pct");
+  if (!badge) {
+    badge = document.createElement("span");
+    badge.className = "option-pct";
+    btn.querySelector(".option-row").appendChild(badge);
+  }
+  badge.textContent = `${pct}%`;
+
+  let barWrap = btn.querySelector(".option-pct-bar-wrap");
+  if (!barWrap) {
+    barWrap = document.createElement("span");
+    barWrap.className = "option-pct-bar-wrap";
+    barWrap.innerHTML = `<span class="option-pct-bar"></span>`;
+    btn.appendChild(barWrap);
+  }
+  barWrap.querySelector(".option-pct-bar").style.width = `${pct}%`;
 }
 
 function registrarVotoMotivoBusca(opcao) {
@@ -285,10 +289,15 @@ function renderMotivoBuscaScreen() {
     btn.type = "button";
     btn.className = "option-card";
     btn.dataset.value = opt;
-    btn.innerHTML = `<span class="option-check"></span><span class="option-label">${opt}</span>`;
+    btn.innerHTML = `
+      <span class="option-row">
+        <span class="option-check"></span>
+        <span class="option-label">${opt}</span>
+      </span>
+    `;
     btn.addEventListener("click", () => {
       handleOptionClick(q, btn, grid);
-      updateVotePercentagesDisplay(grid, q, state.answers[q.key]);
+      showOptionVotePercentage(btn, opt);
     });
     grid.appendChild(btn);
   });
@@ -517,9 +526,6 @@ function validateScreen(n) {
 
 function goNext() {
   if (!validateScreen(state.screen)) return;
-  if (state.screen === 3) {
-    registrarVotoMotivoBusca(state.answers[QUESTIONS[0].key]);
-  }
   if (state.screen < TOTAL_SCREENS) showScreen(state.screen + 1);
 }
 
@@ -627,6 +633,7 @@ async function handleSubmit() {
   status.classList.remove("error");
 
   const payload = collectPayload();
+  registrarVotoMotivoBusca(state.answers[QUESTIONS[0].key]); // conta o voto só agora, na conclusão
   const result = await submitToSheet(payload);
 
   submitBtn.disabled = false;
@@ -661,8 +668,8 @@ function resetAll() {
     .forEach((el) => el.classList.remove("selected"));
   document.querySelectorAll(".option-card.disabled-limit")
     .forEach((el) => el.classList.remove("disabled-limit"));
-  document.querySelectorAll(".option-grid.show-pct").forEach((g) => g.classList.remove("show-pct"));
   document.querySelectorAll(".option-pct").forEach((el) => el.remove());
+  document.querySelectorAll(".option-pct-bar-wrap").forEach((el) => el.remove());
   document.getElementById("submitStatus").textContent = "";
   fetchVoteCounts(); // atualiza o placar pra próxima família
 
