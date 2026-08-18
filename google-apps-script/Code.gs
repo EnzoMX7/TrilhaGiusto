@@ -1,5 +1,5 @@
 /**
- * Colégio Maxi · Trilha de Visita
+ * Colégio Giusto 5 · Trilha de Visita
  * Recebe o envio do site (fetch POST) e grava uma linha por família
  * na aba "Respostas" da planilha onde este script está anexado.
  *
@@ -64,7 +64,7 @@ function getSheet_() {
 }
 
 // ============================================================
-// VOTOS · "O que levou vocês a buscar o Maxi neste momento?"
+// VOTOS · "O que levou vocês a buscar o Giusto neste momento?"
 // Guarda uma contagem por opção, numa aba separada, para o site
 // mostrar a porcentagem de respostas em tempo real.
 // ============================================================

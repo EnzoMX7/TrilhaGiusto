@@ -4,7 +4,7 @@
 // depois de publicá-lo. Veja instruções em google-apps-script/Code.gs
 // ============================================================
 const CONFIG = {
-  SHEET_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbwFY5froZvuUsYLHo_MHK6S4DMFezsOhL-dtklfuRepRoRGiiAvwFNn21E1odELVO90/exec"
+  SHEET_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbz-ZgUoFUz6jLFJYZpu-0uJ6jpkb2BkeHJCfL8mxQPWj9hEgaYmTUWA4_6wESbCrIAX/exec"
 };
 
 // ============================================================
@@ -13,7 +13,7 @@ const CONFIG = {
 const QUESTIONS = [
   {
     key: "q1_motivo_busca",
-    text: "O que levou vocês a buscar o Maxi neste momento?",
+    text: "O que levou vocês a buscar o Giusto neste momento?",
     hint: "uma opção",
     mode: "single",
     options: [
@@ -102,7 +102,7 @@ const QUESTIONS = [
   },
   {
     key: "q8_o_que_pesou",
-    text: "O que mais pesou para chegar até o Maxi?",
+    text: "O que mais pesou para chegar até o Giusto?",
     hint: "marque os que se aplicam",
     mode: "multi",
     min: 1,
@@ -136,7 +136,7 @@ const QUESTIONS = [
       "Expectativas acadêmicas específicas",
       "Rotina e organização familiar",
       "Um momento especial que estamos vivendo",
-      "Nada em especial, só conhecer o Maxi"
+      "Nada em especial, só conhecer o Giusto"
     ]
   }
 ];
@@ -218,7 +218,7 @@ function renderQuestionScreens() {
   });
 }
 
-// Tela 3 · "O que levou vocês a buscar o Maxi neste momento?" — pergunta
+// Tela 3 · "O que levou vocês a buscar o Giusto neste momento?" — pergunta
 // exibida antes da trilha oficial começar, fora do loop das demais perguntas.
 // Mostra, só na opção clicada, a porcentagem de famílias que já escolheram
 // essa opção (guardada na planilha) + uma barrinha proporcional.
@@ -239,7 +239,7 @@ async function fetchVoteCounts() {
     const data = await res.json();
     if (data.ok) voteCounts = data.votos || {};
   } catch (err) {
-    console.warn("[Maxi] Não foi possível buscar os votos da pergunta inicial.", err);
+    console.warn("[Giusto] Não foi possível buscar os votos da pergunta inicial.", err);
   }
 }
 
@@ -452,7 +452,7 @@ function markInvalid(el) {
 function markInvalidChoiceRow(field) {
   const row = document.querySelector(`.choice-row[data-field="${field}"]`);
   row.scrollIntoView({ behavior: "smooth", block: "center" });
-  row.style.outline = "2px solid var(--maxi-red)";
+  row.style.outline = "2px solid var(--giusto-blue)";
   row.style.outlineOffset = "4px";
   setTimeout(() => (row.style.outline = "none"), 600);
 }
@@ -465,7 +465,7 @@ function validateScreen(n) {
     const grid = document.getElementById("motivoBuscaGrid");
     if (!answer) {
       grid.scrollIntoView({ behavior: "smooth", block: "center" });
-      grid.style.outline = "2px solid var(--maxi-red)";
+      grid.style.outline = "2px solid var(--giusto-blue)";
       setTimeout(() => (grid.style.outline = "none"), 600);
       return false;
     }
@@ -510,7 +510,7 @@ function validateScreen(n) {
       const ok = q.mode === "single" ? !!answer : Array.isArray(answer) && answer.length >= min;
       if (!ok) {
         grid.scrollIntoView({ behavior: "smooth", block: "center" });
-        grid.style.outline = `2px solid var(--maxi-red)`;
+        grid.style.outline = `2px solid var(--giusto-blue)`;
         setTimeout(() => (grid.style.outline = "none"), 600);
         return false;
       }
@@ -522,7 +522,7 @@ function validateScreen(n) {
     if (!state.answers.investimento_educacao) {
       const grid = document.getElementById("investimentoGrid");
       grid.scrollIntoView({ behavior: "smooth", block: "center" });
-      grid.style.outline = "2px solid var(--maxi-red)";
+      grid.style.outline = "2px solid var(--giusto-blue)";
       setTimeout(() => (grid.style.outline = "none"), 600);
       return false;
     }
@@ -622,7 +622,7 @@ function collectPayload() {
 
 async function submitToSheet(payload) {
   if (!CONFIG.SHEET_WEBAPP_URL) {
-    console.warn("[Maxi] SHEET_WEBAPP_URL não configurada — resposta não foi enviada à planilha.", payload);
+    console.warn("[Giusto] SHEET_WEBAPP_URL não configurada — resposta não foi enviada à planilha.", payload);
     return { ok: false, reason: "not_configured" };
   }
   try {
@@ -635,7 +635,7 @@ async function submitToSheet(payload) {
     // com no-cors não é possível ler a resposta; assumimos sucesso otimista
     return { ok: true };
   } catch (err) {
-    console.error("[Maxi] Falha ao enviar para a planilha:", err);
+    console.error("[Giusto] Falha ao enviar para a planilha:", err);
     return { ok: false, reason: "network_error" };
   }
 }
