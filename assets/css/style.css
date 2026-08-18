@@ -154,13 +154,13 @@ h1 .logo-inline, h2 .logo-inline { height: 1em; }
   font-style: italic;
   font-weight: 800;
   color: #fff;
-  background: var(--giusto-blue);
+  background: var(--giusto-blue-dark);
   padding: 4px 16px;
   border-radius: 8px;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   line-height: 1.5;
-  box-shadow: 0 6px 18px rgba(0,173,239,.4);
+  box-shadow: 0 6px 18px rgba(0,119,182,.4);
 }
 
 .eyebrow {
