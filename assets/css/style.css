@@ -2,7 +2,8 @@
 
 :root {
   --giusto-blue: #00ADEF;
-  --giusto-blue-hover: #0077B6;
+  --giusto-blue-dark: #0077B6;
+  --giusto-blue-darker: #005A8C;
   --maxi-bg: #0a0a0a;
   --maxi-surface: #1c1c1c;
   --maxi-surface-hover: #262626;
@@ -269,7 +270,7 @@ h1 .logo-inline, h2 .logo-inline { height: 1em; }
   cursor: pointer;
   backdrop-filter: blur(4px);
 }
-.audio-btn.active { background: var(--giusto-blue); border-color: var(--giusto-blue); }
+.audio-btn.active { background: var(--giusto-blue-dark); border-color: var(--giusto-blue-dark); }
 .video-screen .hero-legal { color: var(--maxi-text-muted); margin-top: 16px; }
 .video-screen-logo { height: 32px; width: auto; margin-top: 18px; }
 .video-screen .btn-xl { margin-top: 20px; }
@@ -505,10 +506,10 @@ label.label-disabled {
 }
 .btn:active { transform: scale(.97); }
 .btn-primary {
-  background: var(--giusto-blue);
+  background: var(--giusto-blue-dark);
   color: #fff;
 }
-.btn-primary:hover { background: var(--giusto-blue-hover); }
+.btn-primary:hover { background: var(--giusto-blue-darker); }
 .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
 .btn-ghost {
   background: transparent;
