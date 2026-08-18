@@ -1,9 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
 
 :root {
-  --giusto-blue: #00AEEF;
-  --giusto-blue-dark: #0077B6;
-  --giusto-blue-darker: #00588A;
+  --giusto-blue: #00ADEF;
+  --giusto-blue-hover: #0077B6;
   --maxi-bg: #0a0a0a;
   --maxi-surface: #1c1c1c;
   --maxi-surface-hover: #262626;
@@ -160,7 +159,7 @@ h1 .logo-inline, h2 .logo-inline { height: 1em; }
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   line-height: 1.5;
-  box-shadow: 0 6px 18px rgba(0,174,239,.4);
+  box-shadow: 0 6px 18px rgba(0,173,239,.4);
 }
 
 .eyebrow {
@@ -270,8 +269,9 @@ h1 .logo-inline, h2 .logo-inline { height: 1em; }
   cursor: pointer;
   backdrop-filter: blur(4px);
 }
-.audio-btn.active { background: var(--giusto-blue-dark); border-color: var(--giusto-blue-dark); }
+.audio-btn.active { background: var(--giusto-blue); border-color: var(--giusto-blue); }
 .video-screen .hero-legal { color: var(--maxi-text-muted); margin-top: 16px; }
+.video-screen-logo { height: 32px; width: auto; margin-top: 18px; }
 .video-screen .btn-xl { margin-top: 20px; }
 .hero-copy { font-size: 1.05rem; opacity: .95; }
 .hero-legal { font-size: .8rem; opacity: .7; margin-top: 4px; }
@@ -505,10 +505,10 @@ label.label-disabled {
 }
 .btn:active { transform: scale(.97); }
 .btn-primary {
-  background: var(--giusto-blue-dark);
+  background: var(--giusto-blue);
   color: #fff;
 }
-.btn-primary:hover { background: var(--giusto-blue-darker); }
+.btn-primary:hover { background: var(--giusto-blue-hover); }
 .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
 .btn-ghost {
   background: transparent;
