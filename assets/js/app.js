@@ -286,7 +286,7 @@ function registrarVotoMotivoBusca(opcao) {
   }).catch(() => {});
 }
 
-// Tela 15 · "Quanto a família pretende investir na educação dos filhos?"
+// Tela 15 · "Quanto a família pretende investir por mês na educação dos filhos?"
 // Múltipla escolha, mesmo estilo das demais perguntas (sem porcentagem/voto).
 const INVESTIMENTO_QUESTION = {
   key: "investimento_educacao",
