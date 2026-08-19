@@ -292,10 +292,10 @@ const INVESTIMENTO_QUESTION = {
   key: "investimento_educacao",
   mode: "single",
   options: [
-    "Até R$ 2.000,00",
-    "R$ 2.000,00 – 2.500,00",
+    "Até R$ 2.500,00",
     "R$ 2.500,00 – 3.000,00",
-    "Acima de R$ 3.000,00"
+    "R$ 3.000,00 – 3.500,00",
+    "Acima de R$ 3.500,00"
   ]
 };
 
